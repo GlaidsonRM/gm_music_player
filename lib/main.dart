@@ -9,7 +9,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  var auth = await FirebaseAuth.instance
+  await FirebaseAuth.instance
       .signInWithEmailAndPassword(email: 'ggrrmm@gmail.com', password: '123456');
 
   Get.lazyPut(() => PlayController());

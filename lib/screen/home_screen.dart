@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gm_music_player/controller/play_controller.dart';
 import 'package:gm_music_player/model/music_model.dart';
 import 'package:gm_music_player/screen/player_bottom.dart';
 import 'package:gm_music_player/screen/player_screen.dart';
-import 'package:gm_music_player/screen/player_screen_2.dart';
 
 class HomeScreen extends StatelessWidget {
   final PlayController playController = Get.find();
@@ -19,7 +17,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
               icon: Icon(Icons.next_plan),
-              onPressed: () => Get.to(PlayerScreen2(),
+              onPressed: () => Get.to(PlayerScreen(),
                   duration: Duration(seconds: 1),
                   transition: Transition.rightToLeft))
         ],

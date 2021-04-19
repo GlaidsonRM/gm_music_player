@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gm_music_player/controller/play_controller.dart';
-import 'package:gm_music_player/screen/player_screen_2.dart';
+import 'package:gm_music_player/screen/player_screen.dart';
 
 class PlayerBottom extends StatelessWidget {
   final PlayController playController = Get.find();
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.off(PlayerScreen2(),
+      onTap: () => Get.off(PlayerScreen(),
           transition: Transition.downToUp,
           duration: Duration(milliseconds: 500)),
       child: Container(

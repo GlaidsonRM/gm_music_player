@@ -7,7 +7,6 @@ import 'package:gm_music_player/model/music_model.dart';
 
 class PlayController extends GetxController {
   AudioPlayer audioPlayer = AudioPlayer();
-  final assetsAudioPlayer = AssetsAudioPlayer();
 
   var listAllMusic = [].obs;
   var positionPlay = 0.obs;
@@ -18,50 +17,42 @@ class PlayController extends GetxController {
   @override
   void onInit() async {
 
-    try {
-      await assetsAudioPlayer.open(
-        Audio.network("http://www.mysite.com/myMp3file.mp3"),
-      );
-    } catch (t) {
-      //mp3 unreachable
-    }
+    audioPlayer.onDurationChanged.listen((event) async {
+      durationCurrentAudio.value = event;
+      var dur = await audioPlayer.getDuration();
+      print(dur);
+    });
+    audioPlayer.onAudioPositionChanged.listen((event) {
+      timeCurrentAudio.value = event;
+    });
 
-    // audioPlayer.onDurationChanged.listen((event) async {
-    //   durationCurrentAudio.value = event;
-    //   var dur = await audioPlayer.getDuration();
-    //   print(dur);
-    // });
-    // audioPlayer.onAudioPositionChanged.listen((event) {
-    //   timeCurrentAudio.value = event;
-    // });
-    //
-    // audioPlayer.onSeekComplete.listen((event) {
-    //   print('complete');
-    // });
-    //
-    // audioPlayer.onPlayerCompletion.listen(
-    //   (event) {
-    //     nextPlay();
-    //   },
-    // );
-    //
-    // FirebaseFirestore.instance
-    //     .collection('all_music')
-    //     .snapshots()
-    //     .listen((event) {
-    //   if (event.docs.isNotEmpty) {
-    //     listAllMusic.clear();
-    //
-    //     event.docs.forEach((element) {
-    //       MusicModel musicModel = MusicModel.fromJson(element.data());
-    //       musicModel.isLoading = false;
-    //       musicModel.isPlaying = false;
-    //       listAllMusic.add(musicModel);
-    //     });
-    //
-    //     listAllMusic.sort((a, b) => a.description.compareTo(b.description));
-    //   }
-    // });
+    audioPlayer.onSeekComplete.listen((event) {
+      print('complete');
+    });
+
+    audioPlayer.onPlayerCompletion.listen(
+      (event) {
+        nextPlay();
+      },
+    );
+
+    FirebaseFirestore.instance
+        .collection('all_music')
+        .snapshots()
+        .listen((event) {
+      if (event.docs.isNotEmpty) {
+        listAllMusic.clear();
+
+        event.docs.forEach((element) {
+          MusicModel musicModel = MusicModel.fromJson(element.data());
+          musicModel.isLoading = false;
+          musicModel.isPlaying = false;
+          listAllMusic.add(musicModel);
+        });
+
+        listAllMusic.sort((a, b) => a.description.compareTo(b.description));
+      }
+    });
 
     super.onInit();
   }

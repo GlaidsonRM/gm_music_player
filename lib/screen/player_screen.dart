@@ -1,206 +1,210 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:get/get.dart';
 import 'package:gm_music_player/controller/play_controller.dart';
+import 'package:gm_music_player/screen/home_screen.dart';
 import 'package:gm_music_player/util/time_format.dart';
 
 class PlayerScreen extends StatelessWidget {
   final PlayController playController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
-      backgroundColor: Color(0xFF32373D),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Color(0xFF32373D),
-        automaticallyImplyLeading: false,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ClipOval(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                color: Color(0xFF26292E),
-                elevation: 12,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Icon(
-                      Icons.arrow_back_outlined,
-                      color: Color(0xFF66686D),
-                    ),
+          backgroundColor: Theme.of(context).primaryColor,
+          appBar: AppBar(
+            elevation: 0,
+            title: Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'PLAYLIST',
+                    style: TextStyle(fontSize: 12),
                   ),
-                ),
-              ),
-            ),
-            Text('PLAYING NOW', style: TextStyle(
-              fontFamily: 'Tahoma',
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF6F7376),
-            ),),
-            ClipOval(
-              child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)
-                ),
-                color: Color(0xFF26292E),
-                elevation: 12,
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Icon(
-                      Icons.menu,
-                      color: Color(0xFF66686D),
-                    ),
+                  SizedBox(
+                    height: 4,
                   ),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Center(
-              child: ClipOval(
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50)
-                  ),
-                  elevation: 12,
-                  child: ClipOval(child: FlutterLogo(size: 200,)),
-                ),
+                  Text(
+                    'Loved tracks',
+                    style: TextStyle(fontSize: 12),
+                  )
+                ],
               ),
             ),
-            SizedBox(height: 20,),
-            Text(playController.listAllMusic[
-              playController.positionPlay.value
-            ].description.split('-')[1], style: TextStyle(
-              fontFamily: 'Tahoma',
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF9FA1A3),
-            ),),
-            Text(playController.listAllMusic[
-            playController.positionPlay.value
-            ].description.split('-')[0], style: TextStyle(
-              fontFamily: 'Tahoma',
-              fontSize: 18,
-              color: Color(0xFF535659),
-            ),),
-            SizedBox(height: 20,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(timeMusicFormat(playController.timeCurrentAudio.value), style: TextStyle(
-                  fontFamily: 'Tahoma',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF9FA1A3),
-                ),),
-                Text(timeMusicFormat(playController.durationCurrentAudio.value), style: TextStyle(
-                  fontFamily: 'Tahoma',
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF9FA1A3),
-                ),)
-              ],
-            ),
-            SizedBox(height: 8,),
-            NeumorphicSlider(
-              max: playController.durationCurrentAudio.value.inMilliseconds.toDouble(),
-              value: playController.timeCurrentAudio.value.inMilliseconds.toDouble(),
-              min: 0,
-              onChangeEnd: (value) {
-                playController.setTimeAudioPosition(value.toInt());
-              },
-              onChangeStart: (value) {
-                playController.setTimeAudioPosition(value.toInt());
-              },
-              onChanged: (value) {
-                playController.setTimeAudioPosition(value.toInt());
-              },
-              height: 10,
-              style: SliderStyle(
-                variant: Color(0xFFE33E13),
-                accent: Color(0xFFE9560C),
-                lightSource: LightSource.left,
-
+            leading: IconButton(
+              icon: Icon(
+                Icons.keyboard_arrow_down,
+                size: 40,
+                color: Colors.white,
               ),
+              onPressed: () => Get.off(HomeScreen(),
+                  transition: Transition.upToDown,
+                  duration: Duration(milliseconds: 500)),
             ),
-            SizedBox(height: 20,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ClipOval(
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50
-                        )
-                    ),
-                    color: Color(0xFF282C30),
-                    elevation: 12,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.fast_rewind,
-                          size: 40,
-                          color: Color(0xFF66686D),
+          ),
+          body: Column(
+            children: [
+              Center(
+                  child: GetUtils.isNullOrBlank(playController
+                          .listAllMusic[playController.positionPlay.value]
+                          .urlImage)
+                      ? Image.asset('images/folder.png')
+                      : Image.network(playController
+                          .listAllMusic[playController.positionPlay.value]
+                          .urlImage)),
+              Expanded(
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                            icon: Icon(
+                              Icons.share_outlined,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            onPressed: () {}),
+                        PopupMenuButton<String>(
+                          onSelected: (value) {},
+                          itemBuilder: (context) {
+                            return {'Atualizar'}.map((String choice) {
+                              return PopupMenuItem<String>(
+                                value: choice,
+                                child: Text(choice),
+                              );
+                            }).toList();
+                          },
+                          iconSize: 30,
                         ),
+                        IconButton(
+                            icon: Icon(
+                              Icons.favorite_border,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                            onPressed: () {})
+                      ],
+                    ),
+                    SizedBox(
+                      height: 4,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            timeMusicFormat(
+                                playController.timeCurrentAudio.value),
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Text(
+                            timeMusicFormat(
+                                playController.durationCurrentAudio.value),
+                            style: TextStyle(color: Colors.white),
+                          )
+                        ],
                       ),
                     ),
-                  ),
-                ),
-                ClipOval(
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(60
-                        )
-                    ),
-                    color: Color(0xFFE33E13),
-                    elevation: 12,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.play_arrow,
-                          size: 40,
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 8),
+                      child: NeumorphicSlider(
+                        style: SliderStyle(
+                            accent: Colors.blue, variant: Colors.green),
+                        max: playController
+                            .durationCurrentAudio.value.inMilliseconds
+                            .toDouble(),
+                        value: playController
+                            .timeCurrentAudio.value.inMilliseconds
+                            .toDouble(),
+                        min: 0,
+                        onChangeEnd: (value) {
+                          playController.setTimeAudioPosition(value.toInt());
+                        },
+                        onChangeStart: (value) {
+                          playController.setTimeAudioPosition(value.toInt());
+                        },
+                        onChanged: (value) {
+                          playController.setTimeAudioPosition(value.toInt());
+                        },
+                        height: 2,
+                        thumb: Icon(
+                          Icons.circle,
                           color: Colors.white,
+                          size: 15,
                         ),
                       ),
                     ),
-                  ),
-                ),
-                ClipOval(
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(50
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      playController
+                          .listAllMusic[playController.positionPlay.value]
+                          .description
+                          .split('-')[1],
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    SizedBox(
+                      height: 6,
+                    ),
+                    Text(
+                      playController
+                          .listAllMusic[playController.positionPlay.value]
+                          .description,
+                      style: TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                    SizedBox(
+                      height: 12,
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: playController.backPlay,
+                          child: Icon(
+                            Icons.skip_previous,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        InkWell(
+                          onTap: playController.isPlaying.value
+                              ? playController.pause
+                              : playController.resume,
+                          child: Icon(
+                            playController.isPlaying.value
+                                ? Icons.pause
+                                : Icons.play_arrow,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        InkWell(
+                          onTap: playController.nextPlay,
+                          child: Icon(
+                            Icons.skip_next,
+                            color: Colors.white,
+                            size: 40,
+                          ),
                         )
-                    ),
-                    color: Color(0xFF282C30),
-                    elevation: 12,
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.fast_forward,
-                          size: 40,
-                          color: Color(0xFF66686D),
-                        ),
-                      ),
-                    ),
-                  ),
+                      ],
+                    )
+                  ],
                 ),
-              ],
-            )
-          ],
-        ),
-      ),
-    ));
+              )
+            ],
+          ),
+        ));
   }
 }

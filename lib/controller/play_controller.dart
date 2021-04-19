@@ -1,5 +1,3 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:assets_audio_player_web/web/assets_audio_player_web.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
